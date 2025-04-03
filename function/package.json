@@ -1,0 +1,9 @@
+{
+  "name": "monitoring-data-action",
+  "version": "1.0.0",
+  "description": "",
+  "type": "commonjs",
+  "dependencies": {
+    "purecloud-platform-client-v2": "^217.0.0"
+  }
+}
