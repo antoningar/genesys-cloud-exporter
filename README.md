@@ -18,7 +18,9 @@ Seul l'oauth que va utiliser terraform et son rôle associé sont a créer manue
 
 ### OAUTH
 Pour les déploiement terraform, l'oauth doit avoir un role avec à minima les permissions suivantes:  
-`authorization:role:*`   
+`authorization:role:*`  
+`oauth:client:*`  
+
 
 L'id et le secret de cet oauth doivent être renseignés dans un fichier local suivant cette structure:  
 `oauthclient_id = ""`  
@@ -26,3 +28,10 @@ L'id et le secret de cet oauth doivent être renseignés dans un fichier local s
 `aws_region = "eu-west-1"`  
 
 Les commandes `plan` et `apply` devront être lancées avec l'option `var-file=local.tfvars`
+
+### Process
+1. Creer dans Genesys le role et l'oauth pour terraform
+2. Dans le projet terraform, creer un fichier local.tfvars avec id et secret de l'oauth
+3. Lancer le terraform apply, le traitement va etre interrompu par l'erreur `API Error: 400 - The user does not have access to some of the specified roles.`
+4. Dans Genesys, assigner le role creer par terraform `Custom Exporter Function Role` d'abord a son propre compte, puis a l'oauth terraform
+5. Relancer le terraform apply
