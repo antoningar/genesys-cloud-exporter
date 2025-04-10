@@ -7,10 +7,9 @@ function setLogger(client) {
     client.config.logger.logFormatEnum.formats.LTrace;
   client.config.logger.log_request_body = true;
   client.config.logger.log_response_body = true;
-  client.config.logger.log_to_console = false;
-  client.config.logger.log_file_path = "./log/javascriptsdk.log";
+  client.config.logger.log_to_console = true;
 
-  client.config.logger.setLogger(); // To apply above changes
+  client.config.logger.setLogger();
 }
 
 function getYesterdayInterval() {
@@ -118,11 +117,7 @@ function buildActionBody(interval) {
 function clearAggregates(datas) {
   const clearedAggregates = [];
 
-  if (!datas) {
-    return [];
-  }
-
-  datas.results.forEach((aggregate) => {
+  datas?.results?.forEach((aggregate) => {
     const clearedAggregate = clearAggregate(aggregate);
     if (clearedAggregate) {
         clearedAggregates.push(clearedAggregate);
@@ -187,11 +182,7 @@ async function getConversations(body) {
 function clearConversations(datas) {
   const clearedConversations = [];
 
-  if (!datas) {
-    return {};
-  }
-
-  datas.conversations.forEach((conversation) => {
+  datas?.conversations?.forEach((conversation) => {
     const clearedConversation = conversation.conversationId;
     if (clearedConversation) {
       clearedConversations.push(clearedConversation);

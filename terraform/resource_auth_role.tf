@@ -11,4 +11,9 @@ resource "genesyscloud_auth_role" "function_exporter_role" {
     entity_name = "conversationDetail"
     action_set  = ["view"]
   }
+  permission_policies {
+    domain      = "bridge"
+    entity_name = "actions"
+    action_set  = ["view"]
+  }
 }
