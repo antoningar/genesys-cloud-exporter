@@ -1,0 +1,218 @@
+workflow:
+  name: Exporter_Orchestrator
+  description: ""
+  division: Home
+  startUpRef: "/workflow/states/state[Initial State_10]"
+  defaultLanguage: fr-fr
+  supportedLanguages:
+    fr-fr:
+      none: true
+  settingsErrorHandling:
+    errorHandling:
+      endWorkflow:
+        none: true
+  states:
+    - state:
+        name: Initial State
+        refId: Initial State_10
+        variables:
+          - integerCollectionVariable:
+              name: State.dataActionErrorsCount
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringCollectionVariable:
+              name: State.dataActionErrorType
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringCollectionVariable:
+              name: State.dataActionsErrorsIds
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringCollectionVariable:
+              name: State.dataActionsErrorStatus
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringCollectionVariable:
+              name: State.flowErrorsConversations
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - integerVariable:
+              name: State.flowErrorsTotal
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - integerVariable:
+              name: State.i
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringVariable:
+              name: State.mailBody
+              initialValue:
+                lit: ""
+              isInput: false
+              isOutput: false
+          - stringCollectionVariable:
+              name: State.mailTo
+              initialValue:
+                lit:
+                  - lit: find
+              isInput: false
+              isOutput: false
+          - stringVariable:
+              name: State.mailToInput
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - stringCollectionVariable:
+              name: State.shortConversations
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - integerVariable:
+              name: State.shortConversationsTotal
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+          - userCollectionVariable:
+              name: State.userTo
+              initialValue:
+                noValue: true
+              isInput: false
+              isOutput: false
+        actions:
+          - updateData:
+              name: Update Data
+              statements:
+                - string:
+                    variable: State.mailToInput
+                    value:
+                      lit: {{mails}}
+                - stringCollection:
+                    variable: State.mailTo
+                    value:
+                      exp: Split(State.mailToInput, ",")
+                - userCollection:
+                    variable: State.userTo
+                    value:
+                      lit: []
+          - loop:
+              name: Loop
+              loopCount:
+                exp: Count(State.mailTo)
+              currentIndex:
+                var: State.i
+              outputs:
+                loop:
+                  actions:
+                    - updateData:
+                        name: Update Data
+                        statements:
+                          - userCollection:
+                              variable: State.userTo
+                              value:
+                                exp: AddItem(State.userTo, FindUser(GetAt(State.mailTo, State.i)))
+          - callData:
+              name: Call Data Action
+              timeout:
+                lit:
+                  minutes: 1
+              category:
+                {{integration}}:
+                  dataAction:
+                    {{function_name}}:
+                      inputs:
+                        interval:
+                          noValue: true
+                      successOutputs:
+                        shortConversations.conversations:
+                          var: State.shortConversations
+                        shortConversations.total:
+                          var: State.shortConversationsTotal
+                        flowErrors.conversations:
+                          var: State.flowErrorsConversations
+                        flowErrors.total:
+                          var: State.flowErrorsTotal
+                        dataActionErrors.actionId:
+                          var: State.dataActionsErrorsIds
+                        dataActionErrors.responseStatus:
+                          var: State.dataActionsErrorStatus
+                        dataActionErrors.errorType:
+                          var: State.dataActionErrorType
+                        dataActionErrors.count:
+                          var: State.dataActionErrorsCount
+                      failureOutputs:
+                        errorCode:
+                          noValue: true
+                        status:
+                          noValue: true
+                        correlationId:
+                          noValue: true
+                        entityId:
+                          noValue: true
+                        entityName:
+                          noValue: true
+                        userMessage:
+                          noValue: true
+                        userParamsMessage:
+                          noValue: true
+                        userParams.key:
+                          noValue: true
+                        userParams.value:
+                          noValue: true
+                        details.errorCode:
+                          noValue: true
+                        details.fieldName:
+                          noValue: true
+                        details.entityId:
+                          noValue: true
+                        details.entityName:
+                          noValue: true
+              outputs:
+                success:
+                  actions:
+                    - updateData:
+                        name: Update Data
+                        statements:
+                          - string:
+                              variable: State.mailBody
+                              value:
+                                exp: "\"Yesterday,/n\" + if(State.flowErrorsTotal>0, tostring(State.flowErrorsTotal), \"No\") + \" flow error append\" + ToString(State.flowErrorsConversations) + \".\\n\" + if(State.shortConversationsTotal>0, ToString(State.shortConversationsTotal), \"No\") + \" conversation found with anormal short duration\" + tostring(State.shortConversationsTotal) + \".\\n\" + if(Sum(State.dataActionErrorsCount)>0, ToString(Sum(State.dataActionErrorsCount)), \"No\") + \" data action in error found\" + ToString(State.dataActionsErrorsIds)"
+                    - sendNotification:
+                        name: Send Notification
+                        failureOutputs:
+                          errorType:
+                            noValue: true
+                          errorMessage:
+                            noValue: true
+                        emailFrom:
+                          noValue: true
+                        emailNotificationStyle:
+                          noValue: true
+                        sendToUsers:
+                          exp: State.userTo
+                        body:
+                          lit: okletsgo
+                        subject:
+                          exp: "\"exporter result\""
+                        notificationType:
+                          lit: email
+          - endWorkflow:
+              name: End Workflow
+              exitReason:
+                noValue: true

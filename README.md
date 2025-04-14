@@ -25,7 +25,10 @@ Seul l'oauth que va utiliser terraform et son rôle associé sont a créer manue
 Pour les déploiement terraform, l'oauth doit avoir un role avec à minima les permissions suivantes:  
 `authorization:role:*`  
 `oauth:client:*`  
-`integration:integration:*`
+`integration:integration:*`  
+`architect:flow:*`  
+`architect:job:*`  
+`architect:ui:view`  
 
 L'id et le secret de cet oauth doivent être renseignés dans un fichier local suivant cette structure:  
 `oauthclient_id = ""`  

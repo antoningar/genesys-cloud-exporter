@@ -5,6 +5,6 @@ resource "genesyscloud_integration" "exporter_function_integration" {
     name = "exporter function integration"
   }
   lifecycle {
-    ignore_changes = [ config ]
+    ignore_changes = [config]
   }
 }
