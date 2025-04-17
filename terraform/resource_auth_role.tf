@@ -16,4 +16,9 @@ resource "genesyscloud_auth_role" "function_exporter_role" {
     entity_name = "actions"
     action_set  = ["view"]
   }
+  permission_policies {
+    domain      = "architect"
+    entity_name = "flow"
+    action_set  = ["launch"]
+  }
 }
