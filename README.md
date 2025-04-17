@@ -33,6 +33,11 @@ Pour les déploiement terraform, l'oauth doit avoir un role avec à minima les p
 `authorization:grant:*`  
 `outbound:contactList:*`  
 `outbound:contact:*`  
+`outbound:campaign:*`  
+`outbound:responseSet:view`
+`scripter:script:view`  
+`scripter:publishedScript:view`
+`routing:queue:*`  
 
 L'id et le secret de cet oauth doivent être renseignés dans un fichier local suivant cette structure:  
 `oauthclient_id = ""`  
