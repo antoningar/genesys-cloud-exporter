@@ -1,0 +1,2 @@
+﻿id,number,ContactCallable,ContactableByVoice,ContactableBySms,ContactableByEmail,ZipCodeAutomaticTimeZone,CallRecordLastAttempt-number,CallRecordLastResult-number,CallRecordLastAgentWrapup-number,SmsLastAttempt-number,SmsLastResult-number,Callable-number,ContactableByVoice-number,ContactableBySms-number,AutomaticTimeZone-number,ContactableByWhatsApp
+1,0600000000,1,1,1,1,,,,,,,1,1,1,,1
