@@ -1,7 +1,7 @@
 resource "genesyscloud_integration_action" "execute_exporter_workflow" {
-  name            = "execute_exporter_workflow"
-  category        = data.genesyscloud_integration.genesys_integration.name
-  integration_id  = data.genesyscloud_integration.genesys_integration.id
+  name           = "execute_exporter_workflow"
+  category       = data.genesyscloud_integration.genesys_integration.name
+  integration_id = data.genesyscloud_integration.genesys_integration.id
   contract_output = jsonencode(
     {
       "type" = "object",

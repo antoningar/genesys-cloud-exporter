@@ -44,8 +44,9 @@ Pour les déploiement terraform, l'oauth doit avoir un role avec à minima les p
 L'id et le secret de cet oauth doivent être renseignés dans un fichier local suivant cette structure:  
 `oauthclient_id = ""`  
 `oauthclient_secret = ""`  
-`aws_region = "eu-west-1"`
-`function_name = "exporter_function"`
+`aws_region = "eu-west-1"`  
+`function_name = "exporter_function"`  
+`mails = "wrong@mail.com"`  
 
 Les commandes `plan` et `apply` devront être lancées avec l'option `var-file=local.tfvars`
 
