@@ -25,7 +25,7 @@ resource "genesyscloud_integration_action" "execute_exporter_workflow" {
   config_request {
     request_url_template = "/api/v2/flows/executions"
     request_type         = "POST"
-    request_template     = format("{\"flowId\":\"%s\" \"name\":\"action execute\"}", genesyscloud_flow.flow.id)
+    request_template     = format("{\"flowId\":\"%s\",\"name\":\"action execute\"}", genesyscloud_flow.flow.id)
     headers = {
       Content-Type = "application/json"
     }
@@ -33,6 +33,6 @@ resource "genesyscloud_integration_action" "execute_exporter_workflow" {
   config_response {
     translation_map          = {}
     translation_map_defaults = {}
-    success_template         = "{rawResult}"
+    success_template         = "$${rawResult}"
   }
 }
