@@ -2,7 +2,7 @@ workflow:
   name: Exporter_Orchestrator
   description: ""
   division: Home
-  startUpRef: "/workflow/states/state[Initial State_10]"
+  startUpRef: "/workflow/states/state[Initial State_11]"
   defaultLanguage: fr-fr
   supportedLanguages:
     fr-fr:
@@ -14,42 +14,42 @@ workflow:
   states:
     - state:
         name: Initial State
-        refId: Initial State_10
+        refId: Initial State_11
         variables:
           - integerCollectionVariable:
               name: State.dataActionErrorsCount
               initialValue:
-                noValue: true
+                lit: []
               isInput: false
               isOutput: false
           - stringCollectionVariable:
               name: State.dataActionErrorType
               initialValue:
-                noValue: true
+                lit: []
               isInput: false
               isOutput: false
           - stringCollectionVariable:
               name: State.dataActionsErrorsIds
               initialValue:
-                noValue: true
+                lit: []
               isInput: false
               isOutput: false
           - stringCollectionVariable:
               name: State.dataActionsErrorStatus
               initialValue:
-                noValue: true
+                lit: []
               isInput: false
               isOutput: false
           - stringCollectionVariable:
               name: State.flowErrorsConversations
               initialValue:
-                noValue: true
+                lit: []
               isInput: false
               isOutput: false
           - integerVariable:
               name: State.flowErrorsTotal
               initialValue:
-                noValue: true
+                lit: 0
               isInput: false
               isOutput: false
           - integerVariable:
@@ -80,13 +80,13 @@ workflow:
           - stringCollectionVariable:
               name: State.shortConversations
               initialValue:
-                noValue: true
+                lit: []
               isInput: false
               isOutput: false
           - integerVariable:
               name: State.shortConversationsTotal
               initialValue:
-                noValue: true
+                lit: 0
               isInput: false
               isOutput: false
           - userCollectionVariable:
@@ -189,10 +189,18 @@ workflow:
                     - updateData:
                         name: Update Data
                         statements:
+                          - integer:
+                              variable: State.flowErrorsTotal
+                              value:
+                                exp: if(IsNotSetOrEmpty(State.flowErrorsTotal),0,State.flowErrorsTotal)
+                          - integer:
+                              variable: State.shortConversationsTotal
+                              value:
+                                exp: if(IsNotSetOrEmpty(State.shortConversationsTotal),0,State.shortConversationsTotal)
                           - string:
                               variable: State.mailBody
                               value:
-                                exp: "\"Yesterday,/n\" + if(State.flowErrorsTotal>0, tostring(State.flowErrorsTotal), \"No\") + \" flow error append\" + ToString(State.flowErrorsConversations) + \".\\n\" + if(State.shortConversationsTotal>0, ToString(State.shortConversationsTotal), \"No\") + \" conversation found with anormal short duration\" + tostring(State.shortConversationsTotal) + \".\\n\" + if(Sum(State.dataActionErrorsCount)>0, ToString(Sum(State.dataActionErrorsCount)), \"No\") + \" data action in error found\" + ToString(State.dataActionsErrorsIds)"
+                                exp: "\"Yesterday,\\n\" + if(State.flowErrorsTotal>0, tostring(State.flowErrorsTotal), \"No\") + \" flow error append\" + ToString(State.flowErrorsConversations) + \".\\n\" + if(State.shortConversationsTotal>0, ToString(State.shortConversationsTotal), tostring(State.shortConversationsTotal)) + \" conversation found with anormal short duration\" + \".\\n\" + if(Sum(State.dataActionErrorsCount)>0, ToString(Sum(State.dataActionErrorsCount)), \"No\") + \" data action in error found\" + ToString(State.dataActionsErrorsIds)"
                     - sendNotification:
                         name: Send Notification
                         failureOutputs:
@@ -207,7 +215,7 @@ workflow:
                         sendToUsers:
                           exp: State.userTo
                         body:
-                          lit: okletsgo
+                          exp: State.mailBody
                         subject:
                           exp: "\"exporter result\""
                         notificationType:
