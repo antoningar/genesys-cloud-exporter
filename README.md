@@ -46,7 +46,7 @@ L'id et le secret de cet oauth doivent être renseignés dans un fichier local s
 `oauthclient_secret = ""`  
 `aws_region = "eu-west-1"`  
 `function_name = "exporter_function"`  
-`mails = "wrong@mail.com"`  
+`mails = "wrong@mail.com,wrong2@mail.com"`  
 
 Les commandes `plan` et `apply` devront être lancées avec l'option `var-file=local.tfvars`
 
@@ -59,6 +59,7 @@ Les commandes `plan` et `apply` devront être lancées avec l'option `var-file=l
 5. Relancer le terraform apply
 6. Recuperer le client id et secret du nouvel oauth, les ajouter dans les credentials de l'integration `exporter function integration` en y ajoutant les cles `gc_client_id` `gc_client_secret` et `gc_aws_region`
 7. [Creer la function action](#function-action) (la creation n'est pas encore possible via Cx as Code).
+8. [Create the campaign schedule](#campaign-schedule)
 
 ### Function action
 
@@ -136,6 +137,16 @@ remplir les contracts:
   }
 }
 ```
+
+### Campaign Schedule
+
+<a name="campaign-schedule"></a>
+As Genesys function, outbound campaign can't be scheduled thanks to terraform. To do it manually, go to the schedule tab of campaign management.  
+Select Resource Type: voice campaign, Voice Campaign: Exporter Campaign, then set start date and reccurence pattern as you want to.  
+For example:  
+![](docs/campaign-schedule.PNG)
+
+
 #### Configuration
 Headers :  
 `gc_aws_region = $!{credentials.gc_aws_region}`  
