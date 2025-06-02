@@ -3,6 +3,7 @@ variable "oauthclient_secret" { default = "" }
 variable "aws_region" { default = "" }
 variable "function_name" { default = "" }
 variable "mails" { default = "" }
+variable "edge_group_name" { default = "" }
 
 terraform {
   required_providers {

@@ -1,28 +1,20 @@
 # Genesys Cloud Custom Exporter
 
-Ceci est un exemple d'implémentation d'un export planifié entierement customisable.  
-À l'image des exports planifiés disponible nativement, cet exemple n'utilise aucune autre ressource que celles disponible sur Genesys Cloud.  
-Les [Genesys function](https://developer.genesys.cloud/blog/2025-01-14-genesys-functions/) permettent de récupérer n'importe quelles données et de les formatter librement.  
-Ici ce sont les datas actions en erreur, les déconnexions dues aux erreures de flow et les interactions de courte durées qui sont récupérées.
+This is a sample of how to create a custom scheduled export.
+As native scheduled export from workspace views, this sample is only using Genesys Cloud resources.
+Using [Genesys function](https://developer.genesys.cloud/blog/2025-01-14-genesys-functions/) allow us to customize which datas we will extract and how.
+On this sample data actions errors, flow errors and interactions with small durations are exported.
 
 ![](docs/schedule-exporter.png)
 
-## Function
-
-1. install dependencies  
-   `npm install`
-2. zip everything  
-   windows: `zip a -r function_exporter.zip ./*`  
-   linux: `zip -r function_exporter.zip *`
-
 ## Terraform
 
-Le dossier terraform contient la déclaration de tous les éléments necessaire pour le déploiement d'une telle solution.  
-Seul l'oauth que va utiliser terraform et son rôle associé sont a créer manuellement.
+Terraform folder include almost all Genesys Cloud objects needed to run the sample.
 
 ### OAuth
 
-Pour les déploiement terraform, l'oauth doit avoir un role avec à minima les permissions suivantes:  
+Terraform Oauth has to be to be created manually.  
+Associated role need at least this permissions :  
 `authorization:role:*`  
 `oauth:client:*`  
 `integration:integration:*`  
@@ -34,12 +26,13 @@ Pour les déploiement terraform, l'oauth doit avoir un role avec à minima les p
 `outbound:contactList:*`  
 `outbound:contact:*`  
 `outbound:campaign:*`  
-`outbound:responseSet:view`
+`outbound:responseSet:*`
 `scripter:script:view`  
 `scripter:publishedScript:view`  
-`routing:queue:*`  
 `integrations:action:*`  
 `outbound:ruleSet:add`  
+`routing:wrapupCode:add:*` 
+`telephony:plugin:all`  
 
 L'id et le secret de cet oauth doivent être renseignés dans un fichier local suivant cette structure:  
 `oauthclient_id = ""`  
@@ -47,6 +40,7 @@ L'id et le secret de cet oauth doivent être renseignés dans un fichier local s
 `aws_region = "eu-west-1"`  
 `function_name = "exporter_function"`  
 `mails = "wrong@mail.com,wrong2@mail.com"`  
+`mailsedge_group_name = "Genesys Cloud Hybrid Media Group"`  
 
 Les commandes `plan` et `apply` devront être lancées avec l'option `var-file=local.tfvars`
 
@@ -146,14 +140,22 @@ Select Resource Type: voice campaign, Voice Campaign: Exporter Campaign, then se
 For example:  
 ![](docs/campaign-schedule.PNG)
 
-
 #### Configuration
 Headers :  
 `gc_aws_region = $!{credentials.gc_aws_region}`  
 `gc_client_id = $!{credentials.gc_client_id}`  
 `gc_client_secret = $!{credentials.gc_client_secret}`  
-
-#### Function
+   
+#### Genesys Function
 Handler : main.handler  
 Runtime : nodejs22.x  
 import [zip](./function/function_exporter.zip)
+
+
+## Build Genesys Function
+
+1. install dependencies  
+   `npm install`
+2. zip everything  
+   windows: `zip a -r function_exporter.zip ./*`  
+   linux: `zip -r function_exporter.zip *`

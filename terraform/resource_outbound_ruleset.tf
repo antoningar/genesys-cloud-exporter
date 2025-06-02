@@ -1,7 +1,6 @@
 resource "genesyscloud_outbound_ruleset" "exporter_outbound_ruleset" {
   name            = "exporter_outbound_ruleset"
   contact_list_id = genesyscloud_outbound_contact_list.contact-list.id
-  queue_id        = genesyscloud_routing_queue.tmp_exporter_queue.id
   rules {
     name     = "exporter_outbound_rule"
     order    = 0
