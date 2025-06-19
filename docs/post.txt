@@ -1,0 +1,19 @@
+Avoir des exports customisés Genesys Cloud, c'etait compliqué pour moi !
+
+Les exports planifiés sont super pratique.
+Mais j'ai besoin d'en combiner plusieurs et de les analyser un par un.
+
+Développer une solution externe me fait gagner du temps.
+Mais l'intégration est complexe selon le contexte client.
+
+Au final j'ai trouvé ma solution parfaite : un mix des deux !
+
+Une solution portée à 100% par Genesys Cloud.
+C'est grâce à une Genesys Coud Function en TypeScript que je cible toutes les données qui m'interesse.
+Pour automatiser son execution, je passe par uniquement par des objets Genesys (campagne sortante, worflow ...).
+
+Et pour faciliter son déploiement sur n'importe quel environnement, j'ai packagé le tout via Cx As Code !
+Tout est dispo sur mon github : 
+
+https://developer.genesys.cloud/blog/2025-01-14-genesys-functions/
+https://github.com/antoningar/genesys-cloud-exporter
