@@ -3,3 +3,4 @@
 *.tfvars.json
 *.tfstate.backup
 *.tfstate.*.backup
+node_modules/
